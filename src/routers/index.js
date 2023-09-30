@@ -1,5 +1,7 @@
 const router =  require("express").Router();
 
+router.use("/auth", require("./auth.router"));
+
 router.get("/", (req, res) => {
     return res.json({
         success: true,
