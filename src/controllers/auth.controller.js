@@ -25,16 +25,41 @@ exports.signup = async function (req, res) {
         };
         
         const user = await usersModel.insert(data);
-        console.log("passnya", APP_SECRET);
         const token = jwt.sign({id: user.id}, APP_SECRET);
         
         return res.json({
             success: true,
             message: "Register success",
-            results: token
+            results: {token}
         });
 
     } catch (err) {
+        return res.json({
+            success: false,
+            message: `Registration failed, ${err}`
+        });  
+    }
+};
+
+
+exports.login = async (req, res) => {
+    try {
+        const {username, password} = req.body;
+        const user = await usersModel.findOne(username);
+        if(!user){
+            throw Error("wrong_credentials");
+        }
+        const verify = await argon.verify(user.password, password);
+        if(!verify){
+            throw Error("wrong_credentials");
+        }
+        const token = jwt.sign({id: user.id}, APP_SECRET);
+        return res.json({
+            success: true,
+            message: "Login success!",
+            results: {token}
+        });
+    } catch(err) {
         return res.json({
             success: false,
             message: `Registration failed, ${err}`
