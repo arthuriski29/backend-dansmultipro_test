@@ -3,7 +3,7 @@ const argon = require("argon2");
 const jwt = require("jsonwebtoken");
 const {APP_SECRET} = process.env;
 
-exports.signup = async function (req, res) {
+exports.signup = async (req, res) => {
     try {
         const {username, password} = req.body;
         if(!username){
@@ -66,13 +66,3 @@ exports.login = async (req, res) => {
         });  
     }
 };
-
-// exports.login = async (req, res) => {
-//   try {
-//     const {username, password} = req.body
-//     const user = await usersModel.findOneByUsername(username)
-//     console.log(user)
-//   } catch (error) {
-    
-//   }
-// }
